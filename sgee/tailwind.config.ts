@@ -18,6 +18,7 @@ const config: Config = {
         color2: '#FFFFFF',
         color3: '#0A689D',
         color4: '#FFE381',
+        color5: '#84b3ce',
         color2opacity20: '#1e1e1e96',
         color2opacity10: '#1e1e1e50',
         'color-txt-1': '#000000',

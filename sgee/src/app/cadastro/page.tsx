@@ -12,11 +12,11 @@ const CadastroEquipamento = () => {
   const isFormValid = nome && tipo && descricao;
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <Sidebar />
       <div className="flex justify-center items-center flex-col w-4/5 p-6 bg-color2">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Cadastrar Equipamento</h1>
-        <div className="w-5/6 bg-color2 p-8 rounded-lg shadow-xl shadow-color2opacity10">
+        <div className="w-5/6 bg-color2 p-8 rounded-lg shadow-md shadow-color2opacity10 border-2 border-color1">
           <div className="flex flex-col gap-6 mb-6">
             <div>
               <label htmlFor="nome" className="block text-color-txt-1 text-lg mb-2">Nome:</label>

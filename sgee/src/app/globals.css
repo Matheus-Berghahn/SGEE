@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -30,5 +33,40 @@ body {
   }
 }
 
+.slick-prev, .slick-next {
+  padding-bottom: 5%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 1;
+}
 
+.slick-prev {
+  left: -25px;
+}
+
+.slick-next {
+  right: -20px;
+}
+
+.slick-prev:before, .slick-next:before {
+  color: #000000;
+  font-size: 24px;
+}
+
+.slick-slide {
+  padding: 0 10px; /* Adiciona espaçamento horizontal */
+}
+
+.slick-slide > div {
+  margin: 0 10px; /* Adiciona espaçamento entre os itens */
+}
+
+.circle-color {
+  fill: theme('colors.color5');
+  fill-opacity: 0.08;
+}
 

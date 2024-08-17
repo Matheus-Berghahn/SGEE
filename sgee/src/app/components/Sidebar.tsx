@@ -1,11 +1,10 @@
-// src/app/components/Sidebar.tsx
-
 'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaHome, FaBox, FaList, FaUsers, FaCog } from 'react-icons/fa';
+import { FaHome, FaBox, FaList, FaUsers, FaCog  } from 'react-icons/fa';
+import { MdDashboard } from "react-icons/md";
 
 const Sidebar = () => {
   const pathname = usePathname(); // Para obter o caminho atual
@@ -21,10 +20,16 @@ const Sidebar = () => {
         <p className="text-sm text-color2">email@empresa.com</p>
       </div>
       <div className="border-t border-color2 mx-5" />
-      <div className="flex flex-col mt-14 gap-10 pl-5 flex-grow">
+      <div className="flex flex-col mt-14 gap-10 pl-5 py-5 flex-grow">
+        <Link href="/">
+          <div className={`flex items-center text-xl px-4 py-2 cursor-pointer ${isActive('/') ? 'bg-color2 text-color1 h-16 rounded-l-2xl' : ''}`}>
+            <FaHome className="mr-3" />
+            Home
+          </div>
+        </Link>
         <Link href="/dashboard">
           <div className={`flex items-center text-xl px-4 py-2 cursor-pointer ${isActive('/dashboard') ? 'bg-color2 text-color1 h-16 rounded-l-2xl' : ''}`}>
-            <FaHome className="mr-3" />
+            <MdDashboard className="mr-3" />
             Dashboard
           </div>
         </Link>
@@ -40,15 +45,15 @@ const Sidebar = () => {
             Lista de Equipamentos
           </div>
         </Link>
-        <Link href="/gerenciamento-usuarios">
-          <div className={`flex items-center text-xl px-4 py-2 cursor-pointer ${isActive('/gerenciamento-usuarios') ? 'bg-color2 text-color1 h-16 rounded-l-2xl' : ''}`}>
+        <Link href="/usuarios">
+          <div className={`flex items-center text-xl px-4 py-2 cursor-pointer ${isActive('/usuarios') ? 'bg-color2 text-color1 h-16 rounded-l-2xl' : ''}`}>
             <FaUsers className="mr-3" />
             Gerenciamento de Usuários
           </div>
         </Link>
         <div className="flex-grow" />
-        <Link href="/configuracoes">
-          <div className={`flex items-center text-xl px-4 pt-2 pb-10 cursor-pointer ${isActive('/configuracoes') ? 'bg-color2 text-color1 h-16 rounded-l-2xl' : ''}`}>
+        <Link href="/configuracoes" >
+          <div className={`flex items-center text-xl px-4 pt-2 cursor-pointer ${isActive('/configuracoes') ? 'bg-color2 text-color1 h-16 rounded-l-2xl' : ''}`}>
             <FaCog className="mr-3" />
             Configurações
           </div>

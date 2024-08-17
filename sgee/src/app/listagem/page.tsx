@@ -71,7 +71,7 @@ const ListaEquipamentos = () => {
           </div>
         </div>
 
-        <div className="w-full bg-color2 px-8 py-10 rounded-lg shadow-xl shadow-color2opacity10 overflow-x-auto">
+        <div className="w-full bg-color2 px-8 py-10 rounded-lg shadow-md shadow-color2opacity10 overflow-x-auto border-2 border-color1">
           <table className="w-full table-auto text-color-txt-1">
             <thead>
               <tr className="bg-color-txt-3 text-left">
@@ -113,7 +113,7 @@ const ListaEquipamentos = () => {
           </table>
         </div>
 
-        <div className="mt-6 px-6 pt-6 pb-20 bg-color2 w-full rounded-lg border border-color-txt-3 shadow-xl shadow-color2opacity10">
+        <div className="mt-6 px-6 pt-6 pb-20 bg-color2 w-full rounded-lg  shadow-md shadow-color2opacity10 border-2 border-color1">
           <h2 className="text-xl font-bold text-color-txt-1 mb-4">Descrição do Equipamento</h2>
           <p className="text-color-txt-1 mb-4">
             {equipamentoSelecionado
