@@ -55,7 +55,7 @@ const ListaEquipamentos = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex justify-center items-center flex-col w-4/5 px-20 bg-color2">
+      <div className="flex justify-start pt-[5%] items-center flex-col w-4/5 px-20 bg-color2">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Lista de Equipamentos</h1>
         
         <div className="w-full flex justify-center mb-6">
@@ -66,7 +66,7 @@ const ListaEquipamentos = () => {
               placeholder="Pesquisar por nome, ID ou usuário..."
               value={filtro}
               onChange={handleSearch}
-              className="w-full p-4 pl-12 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
+              className="w-full p-4 pl-12 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1"
             />
           </div>
         </div>

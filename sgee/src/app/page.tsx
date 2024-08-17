@@ -1,30 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Slider from 'react-slick';
 import Accordion from './components/Accordion';
-import { gsap } from 'gsap';
-
 
 const Home = () => {
-
-  useEffect(() => {
-    gsap.fromTo('.card', 
-      { opacity: 0, y: 50 }, 
-      { opacity: 1, y: 0, duration: 1, stagger: 0 }
-    );
-    gsap.fromTo('.card2', 
-      { opacity: 0, }, 
-      { opacity: 1, duration: 1, stagger: 0.2, delay: 0.4}
-    );
-    gsap.fromTo('.card3', 
-      { opacity: 0, }, 
-      { opacity: 1, duration: 1, stagger: 0.5, delay: 0.8 }
-    );
-  }, []);
-
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  // Defina o estado inicial como 0 para manter o primeiro accordion ativo
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
@@ -34,6 +17,10 @@ const Home = () => {
     {
       title: "Dicas para Uso Eficiente",
       content: "Descubra estratégias e dicas para otimizar o uso do sistema e melhorar sua eficiência. Desde atalhos de teclado até personalizações avançadas, essas orientações ajudarão você a tirar o máximo proveito das funcionalidades disponíveis."
+    },
+    {
+      title: "Mudança de Usuário",
+      content: "Para alterar o e-mail ou a senha de acesso ao sistema, é necessário entrar em contato diretamente com nossa equipe. Isso garante a segurança e a integridade das informações da conta. Para iniciar o processo de mudança, envie um e-mail para suporte@empresa.com solicitando as alterações desejadas"
     },
     {
       title: "Suporte e Contato",
@@ -53,7 +40,7 @@ const Home = () => {
     <div className="flex h-screen">
       <Sidebar />
 
-      <div className="flex-grow p-8 bg-color2 relative w-[67%] flex flex-col">
+      <div className="flex-grow justify-start pt-[5%] p-8 bg-color2 relative w-[67%] flex flex-col">
         {/* Círculo decorativo */}
         <svg
           className="absolute top-0 right-0 w-full h-full"
@@ -65,29 +52,29 @@ const Home = () => {
         </svg>
 
         {/* Título no topo */}
-        <h1 className="text-5xl md:text-6xl font-bold text-color-txt-1 text-center mb-12 md:mb-16 drop-shadow-xl ">
+        <h1 className="text-5xl md:text-5xl font-bold text-color-txt-1 text-center mb-12 md:mb-16 drop-shadow-xl ">
           Sistema de Gestão de Equipamentos de Escritório
         </h1>
 
         {/* Primeira linha de cards */}
-        <div className="flex flex-wrap gap-8 mb-8">
-          <div  className="card bg-color2 bg-opacity-90 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 w-full md:w-1/3 border-2 border-color1">
+        <div className="flex flex-wrap gap-8 mb-8 ">
+          <div  className="card bg-color2 bg-opacity-90 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 w-full md:w-1/3 border-2 border-color1 h-[250px]">
             <h2 className="text-xl md:text-2xl font-semibold text-color-txt-1 mb-4">Cadastro Simplificado</h2>
-            <p className="text-color2opacity20 text-justify">
+            <p className="text-color-txt-4 text-[14px] text-justify">
             Gerencie seus equipamentos de forma rápida e eficiente. Com um processo de cadastro intuitivo, você pode adicionar novos itens com detalhes como nome, tipo e descrição. A interface é projetada para facilitar a inclusão e a organização, garantindo que cada equipamento esteja registrado e pronto para uso sem complicações
             </p>
           </div>
 
-          <div className="card bg-color2 bg-opacity-90 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 w-full md:w-1/3 border-2 border-color1">
+          <div className="card bg-color2 bg-opacity-90 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 w-full md:w-1/3 border-2 border-color1  h-[250px]">
             <h2 className="text-xl md:text-2xl font-semibold text-color-txt-1 mb-4">Monitoramento Instantâneo</h2>
-            <p className="text-color2opacity20 text-justify">
+            <p className="text-color-txt-4 text-[14px] text-justify">
             Receba atualizações em tempo real sobre a localização e uso dos seus equipamentos. Monitore o status de cada item e visualize relatórios detalhados para uma gestão eficiente e segura.
             </p>
           </div>
 
-          <div className="card bg-color2 bg-opacity-90 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 w-full md:w-1/3 border-2 border-color1">
+          <div className="card bg-color2 bg-opacity-90 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 w-full md:w-1/3 border-2 border-color1  h-[250px]">
             <h2 className="text-xl md:text-2xl font-semibold text-color-txt-1 mb-4">Facilidade de Uso</h2>
-            <p className="text-color2opacity20 text-justify">
+            <p className="text-color-txt-4 text-[14px] text-justify">
             Explore a facilidade de uso do sistema com uma interface amigável e práticas funcionalidades. Navegue com facilidade entre diferentes seções, aproveite a busca eficiente e os filtros intuitivos para localizar rapidamente qualquer equipamento ou usuário. A experiência foi otimizada para garantir que você possa gerenciar tudo sem esforço.
             </p>
           </div>
@@ -95,7 +82,10 @@ const Home = () => {
 
         {/* Segunda linha de cards */}
         <div className="flex h-full gap-8 w-full ">
-          <div className=' card2 md:w-1/2 '><Accordion /></div>
+          <div className=' card2 md:w-1/2 '>
+            {/* Passe o activeIndex e toggleAccordion para o componente Accordion */}
+            <Accordion activeIndex={activeIndex} toggleAccordion={toggleAccordion} items={items} />
+          </div>
 
           {/* Slider Card */}
           <div className="card3 bg-color2 rounded-lg p-8 shadow-lg shadow-color2opacity10 text-center flex-1 justify-center items-center w-full md:w-1/2 border-2 border-color1">

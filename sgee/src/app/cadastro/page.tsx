@@ -14,7 +14,7 @@ const CadastroEquipamento = () => {
   return (
     <div className="flex ">
       <Sidebar />
-      <div className="flex justify-center items-center flex-col w-4/5 p-6 bg-color2">
+      <div className="flex justify-start pt-[5%] items-center flex-col w-4/5 p-6 bg-color2">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Cadastrar Equipamento</h1>
         <div className="w-5/6 bg-color2 p-8 rounded-lg shadow-md shadow-color2opacity10 border-2 border-color1">
           <div className="flex flex-col gap-6 mb-6">
@@ -25,7 +25,7 @@ const CadastroEquipamento = () => {
                 type="text"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3 placeholder-color2opacity20"
+                className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
                 placeholder="Nome do equipamento"
               />
             </div>
@@ -36,7 +36,7 @@ const CadastroEquipamento = () => {
                   id="tipo"
                   value={tipo}
                   onChange={(e) => setTipo(e.target.value)}
-                  className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
+                  className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1"
                 >
                   <option value="" disabled>Selecione o tipo</option>
                   <option value="notebook">Notebook</option>
@@ -54,7 +54,7 @@ const CadastroEquipamento = () => {
                 type="text"
                 value={idUsuario}
                 onChange={(e) => setIdUsuario(e.target.value)}
-                className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3 placeholder-color2opacity20"
+                className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
                 placeholder="ID do usuário (opcional)"
               />
             </div>
@@ -64,7 +64,7 @@ const CadastroEquipamento = () => {
                 id="descricao"
                 value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
-                className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3 placeholder-color2opacity20"
+                className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
                 placeholder="Descrição do equipamento"
                 rows={4}
               />
@@ -73,7 +73,7 @@ const CadastroEquipamento = () => {
           <div className="flex justify-end">
             <button
               disabled={!isFormValid}
-              className={`px-6 py-3 rounded-lg font-bold text-color bg-color2 border-2 border-color2opacity20   ${
+              className={`px-6 py-3 rounded-lg font-bold text-color-txt-1 bg-color2 border-2 border-color1   ${
                 isFormValid ? ' hover:bg-color3 hover:border-color3 hover:text-color-txt-2 ' : 'bg-color2 opacity-50 border-2 border-color2opacity20  '
               }`}
               title={!isFormValid ? 'Preencha todos os campos obrigatórios' : ''}

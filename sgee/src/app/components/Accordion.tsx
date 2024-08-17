@@ -1,5 +1,6 @@
 // src/app/components/Accordion.tsx
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useSpring, animated } from 'react-spring';
 
 interface AccordionItemProps {
   title: string;
@@ -7,6 +8,22 @@ interface AccordionItemProps {
 }
 
 const AccordionItem = ({ title, content, isOpen, onClick }: AccordionItemProps & { isOpen: boolean; onClick: () => void }) => {
+  const contentRef = useRef<HTMLDivElement>(null); // Referência ao conteúdo
+  const [contentHeight, setContentHeight] = useState(0);
+
+  // Atualize a altura quando o conteúdo mudar
+  useEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight);
+    }
+  }, [isOpen]);
+
+  const animationProps = useSpring({
+    height: isOpen ? `${contentHeight}px` : '0px',
+    opacity: isOpen ? 1 : 0,
+    overflow: 'hidden',
+  });
+
   return (
     <div className="bg-color1 text-color-txt-2 rounded-lg shadow-lg mb-4 overflow-hidden border-2 border-color1">
       <button
@@ -24,46 +41,35 @@ const AccordionItem = ({ title, content, isOpen, onClick }: AccordionItemProps &
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {isOpen && (
-        <div className="p-8 text-color2">
+      <animated.div style={animationProps}>
+        <div ref={contentRef} className="p-8 text-color-txt-2">
           {content}
         </div>
-      )}
+      </animated.div>
     </div>
   );
 };
 
-const Accordion = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+interface AccordionProps {
+  activeIndex: number | null;
+  toggleAccordion: (index: number) => void;
+  items: AccordionItemProps[];
+}
 
-  const handleToggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
-  const items = [
-    {
-      title: 'Segurança e Controle de Acesso',
-      content: 'A segurança dos seus dados é essencial. O sistema oferece uma única conta de administrador, garantindo que apenas uma pessoa tenha controle total sobre as informações. Isso minimiza riscos de acessos não autorizados, mantendo seus dados protegidos e seguros.',
-    },
-    {
-      title: 'Mudança de Usuário',
-      content: 'Para alterar o e-mail ou a senha de acesso ao sistema, é necessário entrar em contato diretamente com nossa equipe. Isso garante a segurança e a integridade das informações da conta. Para iniciar o processo de mudança, envie um e-mail para suporte@empresa.com solicitando as alterações desejadas.',
-    },
-    {
-      title: 'Suporte ao Usuário',
-      content: 'Caso precise de assistência, nossa equipe está pronta para ajudar. Explore nossos recursos de suporte, que incluem guias detalhados e opções de contato direto. Se você encontrar qualquer dificuldade ou tiver dúvidas, não hesite em nos solicitar ajuda. Estamos aqui para garantir que sua experiência com o sistema seja a melhor possível.',
-    },
-  ];
+const Accordion: React.FC<AccordionProps> = ({ activeIndex, toggleAccordion, items }) => {
+  if (!items || items.length === 0) {
+    return <p className="text-center text-color-txt-1">No items available</p>;
+  }
 
   return (
-    <div className="flex h-full justify-center flex-col ">
+    <div className="flex h-full justify-center flex-col">
       {items.map((item, index) => (
         <AccordionItem
           key={index}
           title={item.title}
           content={item.content}
-          isOpen={openIndex === index}
-          onClick={() => handleToggle(index)}
+          isOpen={activeIndex === index}
+          onClick={() => toggleAccordion(index)}
         />
       ))}
     </div>

@@ -89,9 +89,9 @@ const GerenciamentoUsuarios = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <Sidebar />
-      <div className="flex justify-center items-center flex-col w-4/5 px-20 bg-color2">
+      <div className="flex justify-start pt-[5%] items-center flex-col w-4/5 px-20 bg-color2">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Gerenciamento de Usuários</h1>
 
         <div className="w-full flex justify-between items-center mb-6">
@@ -106,7 +106,7 @@ const GerenciamentoUsuarios = () => {
             />
           </div>
           <button
-            className="flex items-center text-white bg-color3 hover:bg-color3 px-6 py-3 rounded-lg"
+            className="flex items-center text-color-txt-2 bg-color3 hover:bg-color3 px-6 py-3 rounded-lg"
             onClick={handleOpenModal}
           >
             <FaUserPlus className="mr-2" />
@@ -193,7 +193,7 @@ const GerenciamentoUsuarios = () => {
             />
             {error && <p className="text-red-500 mt-2">{error}</p>}
             <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+              className="mt-4 px-4 py-2 bg-color3 text-color-txt-2 rounded-lg hover:bg-color4"
               onClick={handleAddUsuario}
             >
               Adicionar
