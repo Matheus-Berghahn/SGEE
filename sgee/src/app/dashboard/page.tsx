@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Bounce, gsap } from 'gsap';
 import Sidebar from '../components/Sidebar';
 
+
 const Dashboard = () => {
   useEffect(() => {
     // Criação da timeline GSAP

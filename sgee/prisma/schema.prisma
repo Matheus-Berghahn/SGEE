@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Adm {
+  email    String @unique @default("metscaipe") 
+  password String @default("admin123")                  
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  name         String
+  createdAt    DateTime      @default(now())
+  equipamentos Equipamento[] 
+}
+
+model Equipamento {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  tipo      String  
+  status    String
+  descricao String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}

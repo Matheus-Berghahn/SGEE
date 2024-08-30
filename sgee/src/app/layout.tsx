@@ -1,9 +1,7 @@
 // src/app/layout.tsx
 
-import { Libre_Franklin } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
 import './globals.css';
-
-const libre_Franklin = Libre_Franklin({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,9 +13,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="light">
-      <body className={libre_Franklin.className}>
+      <body className={GeistSans.className}>
         {children}
       </body>
     </html>
   );
 }
+
+
