@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { FaUserPlus, FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
-import { createUser, getUsers, deleteUser, updateUser } from './action';
-import { User } from '@prisma/client';
+import { createUser, getUsers, deleteUser, updateUser, getEquipamentosDisponiveis } from './action';
+import { Equipamento as PrismaEquipamento } from '@prisma/client';
 import Sidebar from '../components/Sidebar';
 import Modal from '../components/Modal';
 
@@ -15,17 +15,18 @@ interface Equipamento {
 
 interface Usuario {
   id: number;
-  email: string;
   name: string;
+  email: string;
   createdAt: Date;
-  equipamentosCount: number;
   equipamentos: Equipamento[];
+  equipamentosCount: number;
 }
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [novoUsuario, setNovoUsuario] = useState<{ nome: string; email: string }>({ nome: '', email: '' });
-  const [usuarioEditado, setUsuarioEditado] = useState<{ id: number; nome: string; email: string } | null>(null);
+  const [equipamentosDisponiveis, setEquipamentosDisponiveis] = useState<Equipamento[]>([]);
+  const [novoUsuario, setNovoUsuario] = useState<{ nome: string; email: string; equipamentos: number[] }>({ nome: '', email: '', equipamentos: [] });
+  const [usuarioEditado, setUsuarioEditado] = useState<{ id: number; nome: string; email: string; equipamentos: number[] } | null>(null);
   const [error, setError] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState<boolean>(false);
@@ -42,7 +43,17 @@ const Usuarios = () => {
       }
     };
 
+    const fetchEquipamentos = async () => {
+      try {
+        const equipamentosData = await getEquipamentosDisponiveis();
+        setEquipamentosDisponiveis(equipamentosData);
+      } catch (error) {
+        console.error('Erro ao buscar equipamentos disponíveis:', error);
+      }
+    };
+
     fetchUsuarios();
+    fetchEquipamentos();
   }, []);
 
   const handleOpenModal = () => {
@@ -52,6 +63,7 @@ const Usuarios = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setUsuarioEditado(null);
+    setNovoUsuario({ nome: '', email: '', equipamentos: [] });
   };
 
   const handleOpenConfirmDeleteModal = () => {
@@ -69,10 +81,9 @@ const Usuarios = () => {
     }
 
     try {
-      await createUser(novoUsuario.email, novoUsuario.nome, []); // Passe os IDs dos equipamentos se necessário
+      await createUser(novoUsuario.email, novoUsuario.nome, novoUsuario.equipamentos);
       const usuariosData = await getUsers();
       setUsuarios(usuariosData);
-      setNovoUsuario({ nome: '', email: '' });
       setError('');
       handleCloseModal();
     } catch (err) {
@@ -85,7 +96,7 @@ const Usuarios = () => {
     if (!usuarioEditado) return;
 
     try {
-      await updateUser(usuarioEditado.id, usuarioEditado.email, usuarioEditado.nome);
+      await updateUser(usuarioEditado.id, usuarioEditado.email, usuarioEditado.nome, usuarioEditado.equipamentos);
       const usuariosData = await getUsers();
       setUsuarios(usuariosData);
       setUsuarioEditado(null);
@@ -122,8 +133,36 @@ const Usuarios = () => {
 
   const handleSelectUsuario = (usuario: Usuario) => {
     setUsuarioSelecionado(usuario);
-    setUsuarioEditado({ id: usuario.id, nome: usuario.name, email: usuario.email });
+    setUsuarioEditado({
+      id: usuario.id,
+      nome: usuario.name,
+      email: usuario.email,
+      equipamentos: usuario.equipamentos.map(e => e.id),
+    });
   };
+
+  const handleSelectEquipamento = (equipamentoId: number) => {
+    if (usuarioEditado) {
+      setUsuarioEditado({
+        ...usuarioEditado,
+        equipamentos: usuarioEditado.equipamentos.includes(equipamentoId)
+          ? usuarioEditado.equipamentos.filter(id => id !== equipamentoId)
+          : [...usuarioEditado.equipamentos, equipamentoId]
+      });
+    } else {
+      setNovoUsuario({
+        ...novoUsuario,
+        equipamentos: novoUsuario.equipamentos.includes(equipamentoId)
+          ? novoUsuario.equipamentos.filter(id => id !== equipamentoId)
+          : [...novoUsuario.equipamentos, equipamentoId]
+      });
+    }
+  };
+
+  // Filtra equipamentos disponíveis que não estão atribuídos a nenhum usuário
+  const equipamentosDisponiveisParaAdicionar = equipamentosDisponiveis.filter(equipamento =>
+    !usuarios.some(usuario => usuario.equipamentos.some(e => e.id === equipamento.id))
+  );
 
   return (
     <div className="flex">
@@ -144,52 +183,45 @@ const Usuarios = () => {
           </div>
           <button
             className="flex items-center text-color-txt-2 bg-color3 hover:bg-color4 px-6 py-3 rounded-lg"
-            onClick={handleOpenModal}
+            onClick={() => { setUsuarioEditado(null); handleOpenModal(); }}
           >
             <FaUserPlus className="mr-2" />
             Adicionar
           </button>
         </div>
 
-        <div className="w-full bg-color2 px-8 py-10 rounded-lg shadow-md shadow-color2opacity10 overflow-x-auto border-2 border-color1">
-          <table className="w-full table-auto text-color-txt-1">
+        <div className="w-full bg-color2 px-8 py-10 rounded-lg shadow-md">
+          <table className="w-full">
             <thead>
-              <tr className="bg-color-txt-3 text-left">
-                <th className="p-4">Nome</th>
-                <th className="p-4">Email</th>
-                <th className="p-4">Total de Equipamentos</th>
-                <th className="p-4">Data de Criação</th>
-                <th className="p-4">Ações</th>
+              <tr>
+                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Nome</th>
+                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Email</th>
+                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Data de Criação</th>
+                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Equipamentos</th>
+                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {usuariosFiltrados.map((usuario) => (
+              {usuariosFiltrados.map(usuario => (
                 <tr
                   key={usuario.id}
-                  className={`cursor-pointer ${
-                    usuarioSelecionado?.id === usuario.id
-                      ? 'bg-color3 text-color-txt-2'
-                      : 'hover:bg-color-txt-3 text-color-txt-1'
-                  }`}
+                  className={`cursor-pointer ${usuarioSelecionado?.id === usuario.id ? 'bg-gray-200' : ''}`}
                   onClick={() => handleSelectUsuario(usuario)}
                 >
-                  <td className="p-4">{usuario.name}</td>
-                  <td className="p-4">{usuario.email}</td>
-                  <td className="p-4">{usuario.equipamentosCount}</td>
-                  <td className="p-4">{new Date(usuario.createdAt).toLocaleDateString()}</td>
-                  <td className="p-4">
+                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.name}</td>
+                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.email}</td>
+                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{new Date(usuario.createdAt).toLocaleDateString()}</td>
+                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.equipamentosCount}</td>
+                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">
                     <button
-                      className="text-color-txt-2 hover:text-color-txt-1"
-                      onClick={() => handleSelectUsuario(usuario)}
+                      onClick={(e) => { e.stopPropagation(); setUsuarioEditado(usuarioEditado); handleOpenModal(); }}
+                      className="text-blue-500 hover:text-blue-700"
                     >
                       <FaEdit />
                     </button>
                     <button
-                      className="text-color-txt-2 hover:text-color-txt-1 ml-4"
-                      onClick={() => {
-                        setUsuarioSelecionado(usuario);
-                        handleOpenConfirmDeleteModal();
-                      }}
+                      onClick={(e) => { e.stopPropagation(); setUsuarioSelecionado(usuario); handleOpenConfirmDeleteModal(); }}
+                      className="text-red-500 hover:text-red-700 ml-2"
                     >
                       <FaTrash />
                     </button>
@@ -198,72 +230,90 @@ const Usuarios = () => {
               ))}
             </tbody>
           </table>
-        </div>
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+          {usuarioSelecionado && (
+            <div className="mt-8 p-4 border border-color-txt-3 bg-color2 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4">Equipamentos do Usuário</h3>
+              <ul>
+                {usuarioSelecionado.equipamentos.map(equipamento => (
+                  <li key={equipamento.id} className="mb-2">
+                    {equipamento.nome} - {equipamento.tipo}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           title={usuarioEditado ? 'Editar Usuário' : 'Adicionar Usuário'}
         >
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <div className="flex flex-col">
             <input
               type="text"
               placeholder="Nome"
-              value={usuarioEditado?.nome || novoUsuario.nome}
-              onChange={(e) =>
-                usuarioEditado
-                  ? setUsuarioEditado({ ...usuarioEditado, nome: e.target.value })
-                  : setNovoUsuario({ ...novoUsuario, nome: e.target.value })
-              }
+              value={usuarioEditado ? usuarioEditado.nome : novoUsuario.nome}
+              onChange={(e) => {
+                if (usuarioEditado) {
+                  setUsuarioEditado({ ...usuarioEditado, nome: e.target.value });
+                } else {
+                  setNovoUsuario({ ...novoUsuario, nome: e.target.value });
+                }
+              }}
               className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
             />
             <input
               type="email"
               placeholder="Email"
-              value={usuarioEditado?.email || novoUsuario.email}
-              onChange={(e) =>
-                usuarioEditado
-                  ? setUsuarioEditado({ ...usuarioEditado, email: e.target.value })
-                  : setNovoUsuario({ ...novoUsuario, email: e.target.value })
-              }
+              value={usuarioEditado ? usuarioEditado.email : novoUsuario.email}
+              onChange={(e) => {
+                if (usuarioEditado) {
+                  setUsuarioEditado({ ...usuarioEditado, email: e.target.value });
+                } else {
+                  setNovoUsuario({ ...novoUsuario, email: e.target.value });
+                }
+              }}
               className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
             />
-            <div className="flex justify-end">
-              <button
-                onClick={usuarioEditado ? handleEditUsuario : handleAddUsuario}
-                className="bg-color3 hover:bg-color4 text-color-txt-2 px-6 py-3 rounded-lg"
-              >
-                {usuarioEditado ? 'Salvar Alterações' : 'Adicionar'}
-              </button>
+            <div className="mb-4">
+              <p className="text-color-txt-1 mb-2">Selecione Equipamentos:</p>
+              {equipamentosDisponiveisParaAdicionar.map((equipamento) => (
+                <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-blue-100 border border-blue-400' : ''} p-2 rounded-lg`}>
+                  <input
+                    type="checkbox"
+                    checked={(usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)}
+                    onChange={() => handleSelectEquipamento(equipamento.id)}
+                    className="mr-2"
+                  />
+                  {equipamento.nome}
+                </label>
+              ))}
             </div>
+            <button
+              onClick={usuarioEditado ? handleEditUsuario : handleAddUsuario}
+              className="bg-color3 hover:bg-color4 text-color-txt-2 px-4 py-2 rounded-lg"
+            >
+              {usuarioEditado ? 'Atualizar' : 'Adicionar'}
+            </button>
           </div>
         </Modal>
 
-        {isConfirmDeleteOpen && usuarioSelecionado && (
-          <Modal
-            isOpen={isConfirmDeleteOpen}
-            onClose={handleCloseConfirmDeleteModal}
-            title="Confirmação de Exclusão"
+        <Modal
+          isOpen={isConfirmDeleteOpen}
+          onClose={handleCloseConfirmDeleteModal}
+          title="Confirmação"
+        >
+          <p className="mb-4">Tem certeza de que deseja excluir este usuário?</p>
+          <button
+            onClick={handleDeleteUsuario}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
           >
-            <p className="mb-4">Tem certeza de que deseja excluir o usuário {usuarioSelecionado.name}?</p>
-            <div className="flex justify-end">
-              <button
-                onClick={handleDeleteUsuario}
-                className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg"
-              >
-                Excluir
-              </button>
-              <button
-                onClick={handleCloseConfirmDeleteModal}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg ml-4"
-              >
-                Cancelar
-              </button>
-            </div>
-          </Modal>
-        )}
+            Excluir
+          </button>
+        </Modal>
       </div>
     </div>
   );

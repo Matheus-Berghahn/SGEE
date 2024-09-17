@@ -11,15 +11,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
+      <div className="bg-white p-8 rounded-lg shadow-lg z-10 w-1/3">
         <h2 className="text-xl font-bold mb-4">{title}</h2>
-        <div>{children}</div>
+        {children}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
           onClick={onClose}
+          className="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
         >
-          &times;
+          Fechar
         </button>
       </div>
     </div>

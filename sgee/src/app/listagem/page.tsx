@@ -1,240 +1,212 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
-import { getEquipamentos, deleteEquipamento, updateEquipamento } from './action';
+import React, { useState, useEffect } from 'react';
+import { FaPlus, FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
+import { getEquipamentos, createEquipamento, updateEquipamento, deleteEquipamento } from './action';
 import Sidebar from '../components/Sidebar';
 import Modal from '../components/Modal';
 
+// Definição do tipo Equipamento
 interface Equipamento {
   id: number;
   nome: string;
   tipo: string;
-  status: string;
   descricao: string;
+  status: string;
+  usuario?: string; // Adicionando a informação do usuário
 }
 
-const Equipamentos = () => {
+const EquipamentoPage: React.FC = () => {
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
-  const [equipamentoEditado, setEquipamentoEditado] = useState<Equipamento | null>(null);
-  const [error, setError] = useState<string>('');
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState<boolean>(false);
-  const [filtro, setFiltro] = useState<string>('');
+  const [descricao, setDescricao] = useState<string>('');
   const [equipamentoSelecionado, setEquipamentoSelecionado] = useState<Equipamento | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalTipo, setModalTipo] = useState<'adicionar' | 'editar' | 'excluir'>('adicionar');
+
+  // Função para buscar equipamentos
+  const fetchEquipamentos = async () => {
+    try {
+      const data = await getEquipamentos();
+      setEquipamentos(data);
+    } catch (error) {
+      console.error('Erro ao buscar equipamentos:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchEquipamentos = async () => {
-      try {
-        const equipamentosData = await getEquipamentos();
-        setEquipamentos(equipamentosData);
-      } catch (error) {
-        console.error('Erro ao buscar equipamentos:', error);
-      }
-    };
-
     fetchEquipamentos();
   }, []);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  // Função para abrir o modal para adicionar um novo equipamento
+  const handleAddClick = () => {
+    setModalTipo('adicionar');
+    setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEquipamentoEditado(null);
-  };
-
-  const handleOpenConfirmDeleteModal = () => {
-    setIsConfirmDeleteOpen(true);
-  };
-
-  const handleCloseConfirmDeleteModal = () => {
-    setIsConfirmDeleteOpen(false);
-  };
-
-  const handleEditEquipamento = async () => {
-    if (!equipamentoEditado) return;
-
-    try {
-      await updateEquipamento(equipamentoEditado.id, equipamentoEditado.nome, equipamentoEditado.tipo, equipamentoEditado.status, equipamentoEditado.descricao);
-      const equipamentosData = await getEquipamentos();
-      setEquipamentos(equipamentosData);
-      setEquipamentoEditado(null);
-      handleCloseModal();
-    } catch (err) {
-      setError('Erro ao atualizar equipamento.');
-      console.error('Erro ao atualizar equipamento:', err);
-    }
-  };
-
-  const handleDeleteEquipamento = async () => {
-    if (!equipamentoSelecionado) return;
-
-    try {
-      await deleteEquipamento(equipamentoSelecionado.id);
-      const equipamentosData = await getEquipamentos();
-      setEquipamentos(equipamentosData);
-      setEquipamentoSelecionado(null);
-      handleCloseConfirmDeleteModal();
-    } catch (err) {
-      setError('Erro ao excluir equipamento.');
-      console.error('Erro ao excluir equipamento:', err);
-    }
-  };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFiltro(e.target.value);
-  };
-
-  const equipamentosFiltrados = equipamentos.filter((equipamento) =>
-    equipamento.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    equipamento.tipo.toLowerCase().includes(filtro.toLowerCase())
-  );
-
-  const handleSelectEquipamento = (equipamento: Equipamento) => {
+  // Função para abrir o modal para editar um equipamento
+  const handleEditClick = (equipamento: Equipamento) => {
     setEquipamentoSelecionado(equipamento);
-    setEquipamentoEditado(equipamento);
+    setDescricao(equipamento.descricao);
+    setModalTipo('editar');
+    setShowModal(true);
+  };
+
+  // Função para abrir o modal para excluir um equipamento
+  const handleDeleteClick = (equipamento: Equipamento) => {
+    setEquipamentoSelecionado(equipamento);
+    setModalTipo('excluir');
+    setShowModal(true);
+  };
+
+  // Função para fechar o modal
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEquipamentoSelecionado(null);
+    setDescricao('');
+  };
+
+  // Função para salvar a edição do equipamento
+  const handleSave = async () => {
+    if (equipamentoSelecionado) {
+      try {
+        if (modalTipo === 'editar') {
+          await updateEquipamento(equipamentoSelecionado.id, {
+            nome: equipamentoSelecionado.nome,
+            tipo: equipamentoSelecionado.tipo,
+            descricao,
+            status: equipamentoSelecionado.status,
+          });
+        } else if (modalTipo === 'adicionar') {
+          await createEquipamento({
+            nome: '',
+            tipo: '',
+            descricao,
+            status: 'ativo',
+          });
+        } else if (modalTipo === 'excluir') {
+          await deleteEquipamento(equipamentoSelecionado.id);
+        }
+        fetchEquipamentos();
+        handleCloseModal();
+      } catch (error) {
+        console.error('Erro ao salvar equipamento:', error);
+      }
+    }
   };
 
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex flex-col w-4/5 px-20 py-8 bg-color2">
-        <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Gerenciamento de Equipamentos</h1>
-
-        <div className="w-full flex justify-between items-center mb-6">
-          <div className="relative w-2/3">
-            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-color-txt-1" />
+      <div className="flex-1 p-6 bg-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold text-gray-800">Equipamentos</h1>
+        </div>
+        <div className="mb-4">
+          <div className="relative">
+            <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-600" />
             <input
               type="text"
-              placeholder="Pesquisar por nome ou tipo..."
-              value={filtro}
-              onChange={handleSearch}
-              className="w-full p-4 pl-12 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
+              placeholder="Pesquisar..."
+              className="border border-gray-300 p-2 pl-10 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              // Adicione a lógica de pesquisa conforme necessário
             />
           </div>
         </div>
-
-        <div className="w-full bg-color2 px-8 py-10 rounded-lg shadow-md shadow-color2opacity10 overflow-x-auto border-2 border-color1">
-          <table className="w-full table-auto text-color-txt-1">
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+          <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-color-txt-3 text-left">
-                <th className="p-4">Nome</th>
-                <th className="p-4">Tipo</th>
-                <th className="p-4">Status</th>
-                <th className="p-4">Descrição</th>
-                <th className="p-4">Ações</th>
+              <tr>
+                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Nome</th>
+                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Tipo</th>
+                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Status</th>
+                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Usuário</th> {/* Coluna do Usuário */}
+                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {equipamentosFiltrados.map((equipamento) => (
-                <tr
-                  key={equipamento.id}
-                  className={`cursor-pointer ${
-                    equipamentoSelecionado?.id === equipamento.id
-                      ? 'bg-color3 text-color-txt-2'
-                      : 'hover:bg-color-txt-3 text-color-txt-1'
-                  }`}
-                  onClick={() => handleSelectEquipamento(equipamento)}
-                >
-                  <td className="p-4">{equipamento.nome}</td>
-                  <td className="p-4">{equipamento.tipo}</td>
-                  <td className="p-4">{equipamento.status}</td>
-                  <td className="p-4">{equipamento.descricao}</td>
-                  <td className="p-4">
-                    <button
-                      className="text-color-txt-2 hover:text-color-txt-1"
-                      onClick={() => handleSelectEquipamento(equipamento)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="text-color-txt-2 hover:text-color-txt-1 ml-4"
-                      onClick={() => {
-                        setEquipamentoSelecionado(equipamento);
-                        handleOpenConfirmDeleteModal();
-                      }}
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
+              {equipamentos.map((equipamento) => (
+                <React.Fragment key={equipamento.id}>
+                  <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => setEquipamentoSelecionado(equipamentoSelecionado?.id === equipamento.id ? null : equipamento)}>
+                    <td className="border-b border-gray-200 p-4">{equipamento.nome}</td>
+                    <td className="border-b border-gray-200 p-4">{equipamento.tipo}</td>
+                    <td className="border-b border-gray-200 p-4">{equipamento.status}</td>
+                    <td className="border-b border-gray-200 p-4">{equipamento.usuario || 'N/A'}</td> {/* Exibição do usuário */}
+                    <td className="border-b border-gray-200 p-4">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleEditClick(equipamento); }}
+                        className="text-blue-500 hover:text-blue-700 mr-4"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDeleteClick(equipamento); }}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                  {equipamentoSelecionado?.id === equipamento.id && (
+                    <tr>
+                      <td colSpan={5} className="border-b border-gray-200 p-4 bg-gray-50"> {/* Ajustado para 5 colunas */}
+                        <p className="text-gray-700">{equipamento.descricao}</p>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
         </div>
-
-        {error && <p className="text-red-500 mt-4">{error}</p>}
-
-        {equipamentoEditado && (
-          <Modal
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-            title="Editar Equipamento"
-          >
-            <div className="flex flex-col">
-              <input
-                type="text"
-                placeholder="Nome"
-                value={equipamentoEditado.nome}
-                onChange={(e) => setEquipamentoEditado({ ...equipamentoEditado, nome: e.target.value })}
-                className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
-              />
-              <input
-                type="text"
-                placeholder="Tipo"
-                value={equipamentoEditado.tipo}
-                onChange={(e) => setEquipamentoEditado({ ...equipamentoEditado, tipo: e.target.value })}
-                className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
-              />
-              <input
-                type="text"
-                placeholder="Status"
-                value={equipamentoEditado.status}
-                onChange={(e) => setEquipamentoEditado({ ...equipamentoEditado, status: e.target.value })}
-                className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
-              />
-              <textarea
-                placeholder="Descrição"
-                value={equipamentoEditado.descricao}
-                onChange={(e) => setEquipamentoEditado({ ...equipamentoEditado, descricao: e.target.value })}
-                className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
-              />
+        <Modal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          title={
+            modalTipo === 'adicionar'
+              ? 'Adicionar Equipamento'
+              : modalTipo === 'editar'
+              ? 'Editar Equipamento'
+              : 'Excluir Equipamento'
+          }
+        >
+          {modalTipo === 'excluir' ? (
+            <div>
+              <p className="text-gray-800">
+                Tem certeza de que deseja excluir o equipamento <strong>{equipamentoSelecionado?.nome}</strong>?
+              </p>
+              <div className="mt-4 flex gap-4">
+                <button
+                  onClick={handleSave}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600"
+                >
+                  Confirmar Exclusão
+                </button>
+              
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Descrição:</label>
+                <textarea
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  rows={4}
+                  className="border border-gray-300 p-2 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
               <button
-                onClick={handleEditEquipamento}
-                className="p-4 rounded-lg bg-color-txt-1 text-white"
+                onClick={handleSave}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
               >
-                Salvar
+                {modalTipo === 'adicionar' ? 'Adicionar' : 'Salvar'}
               </button>
             </div>
-          </Modal>
-        )}
-
-        {equipamentoSelecionado && (
-          <Modal
-            isOpen={isConfirmDeleteOpen}
-            onClose={handleCloseConfirmDeleteModal}
-            title="Confirmar Exclusão"
-          >
-            <p className="mb-4">Você tem certeza que deseja excluir o equipamento "{equipamentoSelecionado.nome}"?</p>
-            <button
-              onClick={handleDeleteEquipamento}
-              className="p-4 rounded-lg bg-red-500 text-white"
-            >
-              Excluir
-            </button>
-            <button
-              onClick={handleCloseConfirmDeleteModal}
-              className="p-4 rounded-lg bg-gray-500 text-white ml-4"
-            >
-              Cancelar
-            </button>
-          </Modal>
-        )}
+          )}
+        </Modal>
       </div>
     </div>
   );
 };
 
-export default Equipamentos;
+export default EquipamentoPage;

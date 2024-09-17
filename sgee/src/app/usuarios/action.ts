@@ -71,11 +71,17 @@ export async function deleteUser(id: number) {
   }
 }
 
-export async function updateUser(id: number, email: string, name: string) {
+export async function updateUser(id: number, email: string, name: string, equipamentosIds: number[]) {
   try {
     await prisma.user.update({
       where: { id },
-      data: { email, name },
+      data: {
+        email,
+        name,
+        equipamentos: {
+          set: equipamentosIds.map(id => ({ id })),
+        },
+      },
     });
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error);

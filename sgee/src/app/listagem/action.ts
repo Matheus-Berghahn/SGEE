@@ -1,71 +1,71 @@
-import { Equipamento } from '@prisma/client';
+"use server";
 
-const API_URL = '/api/equipamentos'; // Altere conforme necessário
+import { PrismaClient } from '@prisma/client';
 
-export const createEquipamento = async (nome: string, tipo: string, status: string, descricao: string) => {
+const prisma = new PrismaClient();
+
+// Tipo de Equipamento
+interface EquipamentoData {
+  nome: string;
+  tipo: string;
+  descricao: string;
+  status: string;  // Adicionando status
+}
+
+// Função para obter equipamentos
+export async function getEquipamentos() {
   try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ nome, tipo, status, descricao }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ao criar equipamento.');
-    }
-  } catch (error) {
-    console.error('Erro ao criar equipamento:', error);
-    throw error;
-  }
-};
-
-export const getEquipamentos = async (): Promise<Equipamento[]> => {
-  try {
-    const response = await fetch(API_URL);
-
-    if (!response.ok) {
-      throw new Error('Erro ao buscar equipamentos.');
-    }
-
-    return response.json();
+    const equipamentos = await prisma.equipamento.findMany();
+    return equipamentos;
   } catch (error) {
     console.error('Erro ao buscar equipamentos:', error);
-    throw error;
+    throw new Error('Erro ao buscar equipamentos');
   }
-};
+}
 
-export const updateEquipamento = async (id: number, nome: string, tipo: string, status: string, descricao: string) => {
+// Função para criar um equipamento
+export async function createEquipamento(data: EquipamentoData) {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
+    await prisma.equipamento.create({
+      data: {
+        nome: data.nome,
+        tipo: data.tipo,
+        descricao: data.descricao,
+        status: data.status,  // Incluindo status
       },
-      body: JSON.stringify({ nome, tipo, status, descricao }),
     });
+  } catch (error) {
+    console.error('Erro ao criar equipamento:', error);
+    throw new Error('Erro ao criar equipamento');
+  }
+}
 
-    if (!response.ok) {
-      throw new Error('Erro ao atualizar equipamento.');
-    }
+// Função para atualizar um equipamento
+export async function updateEquipamento(id: number, data: EquipamentoData) {
+  try {
+    await prisma.equipamento.update({
+      where: { id },
+      data: {
+        nome: data.nome,
+        tipo: data.tipo,
+        descricao: data.descricao,
+        status: data.status,  // Incluindo status
+      },
+    });
   } catch (error) {
     console.error('Erro ao atualizar equipamento:', error);
-    throw error;
+    throw new Error('Erro ao atualizar equipamento');
   }
-};
+}
 
-export const deleteEquipamento = async (id: number) => {
+// Função para excluir um equipamento
+export async function deleteEquipamento(id: number) {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: 'DELETE',
+    await prisma.equipamento.delete({
+      where: { id },
     });
-
-    if (!response.ok) {
-      throw new Error('Erro ao excluir equipamento.');
-    }
   } catch (error) {
     console.error('Erro ao excluir equipamento:', error);
-    throw error;
+    throw new Error('Erro ao excluir equipamento');
   }
-};
+}

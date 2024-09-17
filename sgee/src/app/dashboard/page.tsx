@@ -1,35 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { Bounce, gsap } from 'gsap';
 import Sidebar from '../components/Sidebar';
 
-
 const Dashboard = () => {
-  useEffect(() => {
-    // Criação da timeline GSAP
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-
-    // Seleção dos cards
-    const cards = document.querySelectorAll('.card');
-
-    // Adicionando animação para cada card
-    cards.forEach((card, index) => {
-      tl.fromTo(
-        card,
-        { scale: 1 },
-        {
-          scale: 1.03,
-          duration: 0.5,
-          ease: 'easeInOut',
-          stagger: 1,
-          yoyo: true,
-          repeat: 1,
-        }
-      );
-    });
-  }, []);
-
   return (
     <div className="flex justify-center items-center w-full h-full bg-color2">
       <Sidebar />
