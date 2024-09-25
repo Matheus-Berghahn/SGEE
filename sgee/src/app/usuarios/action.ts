@@ -8,7 +8,7 @@ export async function getEquipamentosDisponiveis() {
   try {
     const equipamentos = await prisma.equipamento.findMany({
       where: {
-        User: null,
+        user: null,
       },
     });
     return equipamentos;

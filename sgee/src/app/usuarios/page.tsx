@@ -6,6 +6,8 @@ import { createUser, getUsers, deleteUser, updateUser, getEquipamentosDisponivei
 import { Equipamento as PrismaEquipamento } from '@prisma/client';
 import Sidebar from '../components/Sidebar';
 import Modal from '../components/Modal';
+import { useRouter } from "next/navigation";
+
 
 interface Equipamento {
   id: number;
@@ -23,6 +25,7 @@ interface Usuario {
 }
 
 const Usuarios = () => {
+  const router = useRouter();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [equipamentosDisponiveis, setEquipamentosDisponiveis] = useState<Equipamento[]>([]);
   const [novoUsuario, setNovoUsuario] = useState<{ nome: string; email: string; equipamentos: number[] }>({ nome: '', email: '', equipamentos: [] });
@@ -32,6 +35,12 @@ const Usuarios = () => {
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState<boolean>(false);
   const [filtro, setFiltro] = useState<string>('');
   const [usuarioSelecionado, setUsuarioSelecionado] = useState<Usuario | null>(null);
+
+  const equipamentosDisponiveisParaAdicionar = equipamentosDisponiveis.filter(equipamento =>
+    !usuarios.some(usuario => usuario.equipamentos.some(e => e.id === equipamento.id))
+  );
+
+  const equipamentosDoUsuarioSelecionado = usuarioSelecionado ? usuarioSelecionado.equipamentos.map(e => e) : [];
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -58,12 +67,14 @@ const Usuarios = () => {
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
+    router.refresh();
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setUsuarioEditado(null);
     setNovoUsuario({ nome: '', email: '', equipamentos: [] });
+    router.refresh();
   };
 
   const handleOpenConfirmDeleteModal = () => {
@@ -90,6 +101,7 @@ const Usuarios = () => {
       setError('Erro ao adicionar usuário.');
       console.error('Erro ao adicionar usuário:', err);
     }
+    router.refresh();
   };
 
   const handleEditUsuario = async () => {
@@ -101,10 +113,12 @@ const Usuarios = () => {
       setUsuarios(usuariosData);
       setUsuarioEditado(null);
       handleCloseModal();
+      router.refresh();
     } catch (err) {
       setError('Erro ao atualizar usuário.');
       console.error('Erro ao atualizar usuário:', err);
     }
+    
   };
 
   const handleDeleteUsuario = async () => {
@@ -120,6 +134,7 @@ const Usuarios = () => {
       setError('Erro ao excluir usuário.');
       console.error('Erro ao excluir usuário:', err);
     }
+    router.refresh();
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,9 +154,11 @@ const Usuarios = () => {
       email: usuario.email,
       equipamentos: usuario.equipamentos.map(e => e.id),
     });
+    router.refresh();
   };
 
   const handleSelectEquipamento = (equipamentoId: number) => {
+    console.log(usuarioEditado)
     if (usuarioEditado) {
       setUsuarioEditado({
         ...usuarioEditado,
@@ -160,9 +177,8 @@ const Usuarios = () => {
   };
 
   // Filtra equipamentos disponíveis que não estão atribuídos a nenhum usuário
-  const equipamentosDisponiveisParaAdicionar = equipamentosDisponiveis.filter(equipamento =>
-    !usuarios.some(usuario => usuario.equipamentos.some(e => e.id === equipamento.id))
-  );
+
+
 
   return (
     <div className="flex">
@@ -213,12 +229,14 @@ const Usuarios = () => {
                   <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{new Date(usuario.createdAt).toLocaleDateString()}</td>
                   <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.equipamentosCount}</td>
                   <td className="border-b border-color-txt-3 p-4 text-color-txt-1">
-                    <button
+                    {usuarioSelecionado?.id === usuario.id && (
+                      <button
                       onClick={(e) => { e.stopPropagation(); setUsuarioEditado(usuarioEditado); handleOpenModal(); }}
                       className="text-blue-500 hover:text-blue-700"
                     >
                       <FaEdit />
                     </button>
+                    )}
                     <button
                       onClick={(e) => { e.stopPropagation(); setUsuarioSelecionado(usuario); handleOpenConfirmDeleteModal(); }}
                       className="text-red-500 hover:text-red-700 ml-2"
@@ -281,6 +299,18 @@ const Usuarios = () => {
             <div className="mb-4">
               <p className="text-color-txt-1 mb-2">Selecione Equipamentos:</p>
               {equipamentosDisponiveisParaAdicionar.map((equipamento) => (
+                <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-blue-100 border border-blue-400' : ''} p-2 rounded-lg`}>
+                  <input
+                    type="checkbox"
+                    checked={(usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)}
+                    onChange={() => handleSelectEquipamento(equipamento.id)}
+                    className="mr-2"
+                  />
+                  {equipamento.nome}
+                </label>
+              ))}
+              
+              {usuarioEditado && equipamentosDoUsuarioSelecionado.map((equipamento) => (
                 <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-blue-100 border border-blue-400' : ''} p-2 rounded-lg`}>
                   <input
                     type="checkbox"

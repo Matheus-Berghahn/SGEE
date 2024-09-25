@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { createEquipamento, getUsers } from './action';
+import { useRouter } from "next/navigation";
 
 const Cadastro = () => {
+  const router = useRouter();
   const [nome, setNome] = useState('');
   const [tipo, setTipo] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -26,7 +28,7 @@ const Cadastro = () => {
       }
     };
     fetchUsers();
-  }, []);
+  }, [success]);
 
   const isFormValid = nome && tipo && descricao;
 
@@ -41,16 +43,20 @@ const Cadastro = () => {
     }
 
     try {
-      await createEquipamento(nome, tipo.toUpperCase(), descricao, idUsuario || null); // Envia null se nenhum usuário for selecionado
+      await createEquipamento(nome, tipo.toUpperCase(), descricao, idUsuario || null);
+      
       setSuccess('Equipamento cadastrado com sucesso!');
       setNome('');
       setTipo('');
       setDescricao('');
       setIdUsuario('');
+      
     } catch (error) {
       setError('Erro ao cadastrar equipamento. Por favor, tente novamente.');
       console.log(error);
     }
+
+    
   }
 
   return (

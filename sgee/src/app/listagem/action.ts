@@ -15,7 +15,11 @@ interface EquipamentoData {
 // Função para obter equipamentos
 export async function getEquipamentos() {
   try {
-    const equipamentos = await prisma.equipamento.findMany();
+    const equipamentos = await prisma.equipamento.findMany({
+      include: {
+        user: true,
+      },
+    });
     return equipamentos;
   } catch (error) {
     console.error('Erro ao buscar equipamentos:', error);

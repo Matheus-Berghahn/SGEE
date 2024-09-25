@@ -13,7 +13,11 @@ interface Equipamento {
   tipo: string;
   descricao: string;
   status: string;
-  usuario?: string; // Adicionando a informação do usuário
+  user?: User;
+}
+
+interface User {
+  name: string;
 }
 
 const EquipamentoPage: React.FC = () => {
@@ -65,6 +69,7 @@ const EquipamentoPage: React.FC = () => {
     setDescricao('');
   };
 
+  console.log(equipamentos)
   // Função para salvar a edição do equipamento
   const handleSave = async () => {
     if (equipamentoSelecionado) {
@@ -130,7 +135,7 @@ const EquipamentoPage: React.FC = () => {
                     <td className="border-b border-gray-200 p-4">{equipamento.nome}</td>
                     <td className="border-b border-gray-200 p-4">{equipamento.tipo}</td>
                     <td className="border-b border-gray-200 p-4">{equipamento.status}</td>
-                    <td className="border-b border-gray-200 p-4">{equipamento.usuario || 'N/A'}</td> {/* Exibição do usuário */}
+                    <td className="border-b border-gray-200 p-4">{equipamento.user?.name || 'N/A'}</td> {/* Exibição do usuário */}
                     <td className="border-b border-gray-200 p-4">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleEditClick(equipamento); }}
