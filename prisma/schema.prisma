@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Adm {
-  email    String @unique @default("metscaipe") 
-  password String @default("admin123")                  
+  email    String @unique @default("adm") 
+  password String @default("adm123")                  
 }
 
 model User {

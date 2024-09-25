@@ -13,7 +13,7 @@ const Sidebar = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="flex flex-col w-[20%] min-h-screen bg-color1 text-color-txt-2">
+    <div className="flex flex-col w-[20%] min-h-screen h-full bg-color1 text-color-txt-2 fixed z-10 top-0 left-0">
       <div className="flex flex-col items-center py-6">
         <Image src="/logo_2.png" alt="Logo" width={120} height={120} className="rounded-xl" />
         <p className="mt-2 text-color-txt-2">Nome da Empresa</p>

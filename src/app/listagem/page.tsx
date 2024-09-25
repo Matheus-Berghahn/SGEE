@@ -6,7 +6,6 @@ import { getEquipamentos, createEquipamento, updateEquipamento, deleteEquipament
 import Sidebar from '../components/Sidebar';
 import Modal from '../components/Modal';
 
-// Definição do tipo Equipamento
 interface Equipamento {
   id: number;
   nome: string;
@@ -26,12 +25,12 @@ const EquipamentoPage: React.FC = () => {
   const [equipamentoSelecionado, setEquipamentoSelecionado] = useState<Equipamento | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalTipo, setModalTipo] = useState<'adicionar' | 'editar' | 'excluir'>('adicionar');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  // Função para buscar equipamentos
   const fetchEquipamentos = async () => {
     try {
       const data = await getEquipamentos();
-      setEquipamentos(data);
+      setEquipamentos(data || []);
     } catch (error) {
       console.error('Erro ao buscar equipamentos:', error);
     }
@@ -69,7 +68,6 @@ const EquipamentoPage: React.FC = () => {
     setDescricao('');
   };
 
-  console.log(equipamentos)
   // Função para salvar a edição do equipamento
   const handleSave = async () => {
     if (equipamentoSelecionado) {
@@ -99,9 +97,15 @@ const EquipamentoPage: React.FC = () => {
     }
   };
 
+  // Função para filtrar equipamentos com base no termo de pesquisa
+  const filteredEquipamentos = equipamentos.filter((equipamento) =>
+    equipamento.nome.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="flex">
       <Sidebar />
+      <div className='w-[20%] h-full'></div>
       <div className="flex-1 p-6 bg-gray-100">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-bold text-gray-800">Equipamentos</h1>
@@ -113,7 +117,8 @@ const EquipamentoPage: React.FC = () => {
               type="text"
               placeholder="Pesquisar..."
               className="border border-gray-300 p-2 pl-10 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              // Adicione a lógica de pesquisa conforme necessário
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o termo de pesquisa
             />
           </div>
         </div>
@@ -124,18 +129,18 @@ const EquipamentoPage: React.FC = () => {
                 <th className="border-b border-gray-200 p-4 text-left text-gray-700">Nome</th>
                 <th className="border-b border-gray-200 p-4 text-left text-gray-700">Tipo</th>
                 <th className="border-b border-gray-200 p-4 text-left text-gray-700">Status</th>
-                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Usuário</th> {/* Coluna do Usuário */}
+                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Usuário</th>
                 <th className="border-b border-gray-200 p-4 text-left text-gray-700">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {equipamentos.map((equipamento) => (
+              {filteredEquipamentos.map((equipamento) => (
                 <React.Fragment key={equipamento.id}>
                   <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => setEquipamentoSelecionado(equipamentoSelecionado?.id === equipamento.id ? null : equipamento)}>
                     <td className="border-b border-gray-200 p-4">{equipamento.nome}</td>
                     <td className="border-b border-gray-200 p-4">{equipamento.tipo}</td>
                     <td className="border-b border-gray-200 p-4">{equipamento.status}</td>
-                    <td className="border-b border-gray-200 p-4">{equipamento.user?.name || 'N/A'}</td> {/* Exibição do usuário */}
+                    <td className="border-b border-gray-200 p-4">{equipamento.user?.name || 'N/A'}</td>
                     <td className="border-b border-gray-200 p-4">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleEditClick(equipamento); }}
@@ -153,8 +158,8 @@ const EquipamentoPage: React.FC = () => {
                   </tr>
                   {equipamentoSelecionado?.id === equipamento.id && (
                     <tr>
-                      <td colSpan={5} className="border-b border-gray-200 p-4 bg-gray-50"> {/* Ajustado para 5 colunas */}
-                        <p className="text-gray-700">{equipamento.descricao}</p>
+                      <td colSpan={5} className="border-b border-gray-200  p-4 bg-color3">
+                        <p className="text-color-txt-2">{equipamento.descricao}</p>
                       </td>
                     </tr>
                   )}
@@ -186,7 +191,6 @@ const EquipamentoPage: React.FC = () => {
                 >
                   Confirmar Exclusão
                 </button>
-              
               </div>
             </div>
           ) : (

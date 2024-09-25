@@ -183,6 +183,8 @@ const Usuarios = () => {
   return (
     <div className="flex">
       <Sidebar />
+      
+      <div className='w-[20%] h-full'></div>
       <div className="flex flex-col w-4/5 px-20 py-8 bg-color2">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Gerenciamento de Usuários</h1>
 

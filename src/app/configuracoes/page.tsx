@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Configuracoes = () => {
   const [mostrarSenha, setMostrarSenha] = useState<boolean>(false);
+  const [senha, setSenha] = useState<string>('adm123'); // Preenchendo com a senha padrão
   const [theme, setTheme] = useState<string>('light');
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const Configuracoes = () => {
   return (
     <div className="flex">
       <Sidebar />
+      <div className='w-[20%] h-full'></div>
       <div className="flex justify-start pt-[5%] items-center flex-col w-4/5 px-20 bg-color2 ">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Configurações</h1>
 
@@ -34,8 +36,10 @@ const Configuracoes = () => {
             <div className="relative mt-4">
               <input
                 type={mostrarSenha ? 'text' : 'password'}
+                value={senha} // Adicionando o valor da senha
                 placeholder="Senha"
                 className="p-2 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1"
+                readOnly // Se quiser que o usuário não possa editar, mantenha como readOnly
               />
               <button
                 type="button"

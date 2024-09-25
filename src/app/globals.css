@@ -33,10 +33,20 @@ body {
   }
 }
 
-/* globals.css */
-/* globals.css */
+/* Para navegadores baseados em WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 12px; /* Largura da scrollbar */
+  background-color: var(--color2); /* Cor de fundo da scrollbar (cor secundária do tema) */
+}
 
-/* Light Theme */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color3); /* Cor da "thumb" da scrollbar (cor de destaque do tema) *
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color4); /* Cor da "thumb" ao passar o mouse (cor de acento do tema) */
+}
+
 /* global.css */
 :root {
   --color1: #1D1D1D;
