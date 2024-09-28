@@ -35,7 +35,7 @@ export async function createEquipamento(data: EquipamentoData) {
         nome: data.nome,
         tipo: data.tipo,
         descricao: data.descricao,
-        status: data.status,  // Incluindo status
+        status: data.status,
       },
     });
   } catch (error) {
@@ -53,7 +53,7 @@ export async function updateEquipamento(id: number, data: EquipamentoData) {
         nome: data.nome,
         tipo: data.tipo,
         descricao: data.descricao,
-        status: data.status,  // Incluindo status
+        status: data.status,
       },
     });
   } catch (error) {

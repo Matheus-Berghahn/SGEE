@@ -33,7 +33,7 @@ export const createEquipamento = async (
         nome,
         tipo,
         descricao,
-        status: idUsuario ? 'em uso' : 'disponível', // Definindo o status com base no usuário
+        status: idUsuario ? 'em uso' : 'disponível',
         user: idUsuario ? { connect: { id: parseInt(idUsuario) } } : undefined,
       },
     });
