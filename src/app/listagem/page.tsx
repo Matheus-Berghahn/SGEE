@@ -12,7 +12,7 @@ interface Equipamento {
   tipo: string;
   descricao: string;
   status: string;
-  user?: User;
+  user?: User | null;
 }
 
 interface User {

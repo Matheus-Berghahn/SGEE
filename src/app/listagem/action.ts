@@ -9,7 +9,7 @@ interface EquipamentoData {
   nome: string;
   tipo: string;
   descricao: string;
-  status: string;  // Adicionando status
+  status: string;  
 }
 
 // Função para obter equipamentos

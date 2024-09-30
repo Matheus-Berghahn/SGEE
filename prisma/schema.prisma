@@ -9,7 +9,7 @@ datasource db {
 
 model Adm {
   email    String @unique @default("adm") 
-  password String @default("adm123")                  
+  password String @default("adm123")               
 }
 
 model User {
@@ -29,3 +29,4 @@ model Equipamento {
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int?
 }
+
