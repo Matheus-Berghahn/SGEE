@@ -56,16 +56,16 @@ const Configuracoes = () => {
           <h3 className="text-3xl font-semibold text-color-txt-1">Tema</h3>
           <div className="flex gap-4">
             <button
-              onClick={() => changeTheme('light')}
-              className={`py-2 px-4 rounded-lg border-2 bg-color1 text-color-txt-1 ${theme === 'light' ? 'border-color2' : 'border-color4'}`}
-            >
-              Light
-            </button>
-            <button
               onClick={() => changeTheme('dark')}
               className={`py-2 px-4 rounded-lg border-2 bg-color1 text-color-txt-1 ${theme === 'dark' ? 'border-color2' : 'border-color4'}`}
             >
               Dark
+            </button>
+            <button
+              onClick={() => changeTheme('Light')}
+              className={`py-2 px-4 rounded-lg border-2 bg-color1 text-color-txt-1 ${theme === 'Light' ? 'border-color2' : 'border-color4'}`}
+            >
+              Light
             </button>
           </div>
         </div>
