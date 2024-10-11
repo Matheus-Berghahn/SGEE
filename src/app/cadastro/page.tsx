@@ -63,9 +63,9 @@ const Cadastro = () => {
     <div className="flex">
       <Sidebar />
       <div className='w-[20%] h-full'></div>
-      <div className="flex justify-start pt-[5%] items-center flex-col w-4/5 p-6 bg-color2">
+      <div className="flex justify-start pt-[3%] items-center flex-col w-4/5 p-6 bg-color1 ">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Cadastrar Equipamento</h1>
-        <div className="w-5/6 bg-color2 p-8 rounded-lg shadow-md shadow-color2opacity10 border-2 border-color1">
+        <div className="w-5/6 bg-color4 p-8 rounded-2xl">
           {error && (
             <div className="mb-4 p-2 bg-red-100 text-red-800 border border-red-300 rounded-md">
               {error}
@@ -77,15 +77,15 @@ const Cadastro = () => {
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6 mb-6">
+            <div className="flex flex-col gap-6 mb-6 bg-color4">
               <div>
-                <label htmlFor="nome" className="block text-color-txt-1 text-lg mb-2">Nome:</label>
+                <label htmlFor="nome" className="block text-color-txt-1 text-lg mb-2 bg-color4">Nome:</label>
                 <input
                   id="nome"
                   type="text"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
+                  className="w-full p-4 rounded-lg bg-color4 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
                   placeholder="Nome do equipamento"
                 />
               </div>
@@ -96,7 +96,7 @@ const Cadastro = () => {
                     id="tipo"
                     value={tipo}
                     onChange={(e) => setTipo(e.target.value)}
-                    className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1"
+                    className="w-full p-4 rounded-lg bg-color4 text-color-txt-1 border border-color-txt-1"
                   >
                     <option value="" disabled>Selecione o tipo</option>
                     {tiposPermitidos.map((tipoOption) => (
@@ -114,7 +114,7 @@ const Cadastro = () => {
                     id="idUsuario"
                     value={idUsuario}
                     onChange={(e) => setIdUsuario(e.target.value)}
-                    className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1"
+                    className="w-full p-4 rounded-lg bg-color4 text-color-txt-1 border border-color-txt-1"
                   >
                     <option value="">Selecione um usuário (opcional)</option>
                     {usuarios.map((user) => (
@@ -131,7 +131,7 @@ const Cadastro = () => {
                   id="descricao"
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
-                  className="w-full p-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
+                  className="w-full p-4 rounded-lg bg-color4 text-color-txt-1 border border-color-txt-1 placeholder-color-txt-1"
                   placeholder="Descrição do equipamento"
                   rows={4}
                 />
@@ -141,8 +141,8 @@ const Cadastro = () => {
               <button
                 type="submit"
                 disabled={!isFormValid}
-                className={`px-6 py-3 rounded-lg font-bold text-color-txt-1 bg-color2 border-2 border-color1 ${
-                  isFormValid ? 'hover:bg-color3 hover:border-color3 hover:text-color-txt-2' : 'opacity-50 border-color2opacity20'
+                className={`px-6 py-3 rounded-lg font-bold text-color-txt-2 bg-color2 ${
+                  isFormValid ? 'hover:bg-color3 hover:border-color3 hover:text-color-txt-2' : 'opacity-70 border-color2opacity20'
                 }`}
                 title={!isFormValid ? 'Preencha todos os campos obrigatórios' : ''}
               >

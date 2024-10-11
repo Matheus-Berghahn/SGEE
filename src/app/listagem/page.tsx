@@ -106,42 +106,42 @@ const EquipamentoPage: React.FC = () => {
     <div className="flex">
       <Sidebar />
       <div className='w-[20%] h-full'></div>
-      <div className="flex-1 p-6 bg-gray-100">
+      <div className="flex-1 p-6 bg-color1">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-gray-800">Equipamentos</h1>
+          <h1 className="text-3xl font-bold text-color-txt-1">Equipamentos</h1>
         </div>
         <div className="mb-4">
           <div className="relative">
-            <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-600" />
+            <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-color-txt-1" />
             <input
               type="text"
               placeholder="Pesquisar..."
-              className="border border-gray-300 p-2 pl-10 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className=" p-2 pl-10 w-full rounded-lg shadow-sm bg-color1 text-color-txt-1 border border-color-txt-3"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o termo de pesquisa
             />
           </div>
         </div>
-        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+        <div className="bg-color4 shadow-md rounded-lg overflow-x-auto p-4">
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Nome</th>
-                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Tipo</th>
-                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Status</th>
-                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Usuário</th>
-                <th className="border-b border-gray-200 p-4 text-left text-gray-700">Ações</th>
+                <th className="border-b border-color2 p-4 text-left text-color-txt-1">Nome</th>
+                <th className="border-b border-color2  p-4 text-left text-color-txt-1">Tipo</th>
+                <th className="border-b border-color2  p-4 text-left text-color-txt-1">Status</th>
+                <th className="border-b border-color2  p-4 text-left text-color-txt-1">Usuário</th>
+                <th className="border-b border-color2  p-4 text-left text-color-txt-1">Ações</th>
               </tr>
             </thead>
             <tbody>
               {filteredEquipamentos.map((equipamento) => (
                 <React.Fragment key={equipamento.id}>
-                  <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => setEquipamentoSelecionado(equipamentoSelecionado?.id === equipamento.id ? null : equipamento)}>
-                    <td className="border-b border-gray-200 p-4">{equipamento.nome}</td>
-                    <td className="border-b border-gray-200 p-4">{equipamento.tipo}</td>
-                    <td className="border-b border-gray-200 p-4">{equipamento.status}</td>
-                    <td className="border-b border-gray-200 p-4">{equipamento.user?.name || 'N/A'}</td>
-                    <td className="border-b border-gray-200 p-4">
+                  <tr className="cursor-pointer" onClick={() => setEquipamentoSelecionado(equipamentoSelecionado?.id === equipamento.id ? null : equipamento)}>
+                    <td className="border-b border-color1 text-color-txt-1 p-4">{equipamento.nome}</td>
+                    <td className="border-b border-color1 text-color-txt-1 p-4">{equipamento.tipo}</td>
+                    <td className="border-b border-color1 text-color-txt-1 p-4">{equipamento.status}</td>
+                    <td className="border-b border-color1 text-color-txt-1 p-4">{equipamento.user?.name || 'N/A'}</td>
+                    <td className="border-b border-color1 text-color-txt-1 p-4">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleEditClick(equipamento); }}
                         className="text-blue-500 hover:text-blue-700 mr-4"
@@ -158,8 +158,8 @@ const EquipamentoPage: React.FC = () => {
                   </tr>
                   {equipamentoSelecionado?.id === equipamento.id && (
                     <tr>
-                      <td colSpan={5} className="border-b border-gray-200  p-4 bg-color3">
-                        <p className="text-color-txt-2">{equipamento.descricao}</p>
+                      <td colSpan={5} className=" border-x-4 border-color4 text-color-txt-1 p-4 bg-color1 rounded-b-2xl">
+                        <p className="text-color-txt-4 font-light">{equipamento.descricao}</p>
                       </td>
                     </tr>
                   )}
@@ -181,7 +181,7 @@ const EquipamentoPage: React.FC = () => {
         >
           {modalTipo === 'excluir' ? (
             <div>
-              <p className="text-gray-800">
+              <p className="text-color-txt-1">
                 Tem certeza de que deseja excluir o equipamento <strong>{equipamentoSelecionado?.nome}</strong>?
               </p>
               <div className="mt-4 flex gap-4">
@@ -196,17 +196,17 @@ const EquipamentoPage: React.FC = () => {
           ) : (
             <div>
               <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Descrição:</label>
+                <label className="block text-color-txt-4 mb-2 pb-2">Descrição:</label>
                 <textarea
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
                   rows={4}
-                  className="border border-gray-300 p-2 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border-2 border-color3 bg-color1 p-2 w-full rounded-lg shadow-sm focus:outline-none focus:ring-2 text-color-txt-1 "
                 />
               </div>
               <button
                 onClick={handleSave}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
+                className="bg-color2 text-color-txt-2 px-4 py-2 rounded-lg shadow-md"
               >
                 {modalTipo === 'adicionar' ? 'Adicionar' : 'Salvar'}
               </button>

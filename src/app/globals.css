@@ -49,64 +49,45 @@ body {
 
 /* global.css */
 :root {
-  --color1: #1D1D1D;
-  --color2: #FFFFFF;
-  --color3: #006faf;
-  --color4: #005688;
-  --color5: #84b3ce;
-  --color2opacity20: #1e1e1e96;
-  --color2opacity10: #1e1e1e50;
-  --color-txt-1: #000000;
-  --color-txt-2: #FFFFFF;
-  --color-txt-3: #E0E0E0;
-  --color-txt-4: #000000;
-}
-
-/* Tema Claro */
-[data-theme='dark'] {
-  --color1: #006faf;
-  --color2: #000000;
-  --color3: #006faf;
-  --color4: #005688;
-  --color5: #84b3ce;
-  --color2opacity20: #00000096;
-  --color2opacity10: #00000050;
-  --color-txt-1: #FFFFFF;
-  --color-txt-2: #FFFFFF;
-  --color-txt-3: #8a8a8a;
+  --color1: #141519;
+  --color2: #e7c851;
+  --color3: #ffffff;
+  --color4: #232429;
+  --color2opacity20: #ffffff;
+  --color2opacity10: #1a1a1a;
+  --color-txt-1: #ffffff;
+  --color-txt-2: #141519;
+  --color-txt-3: #e7c851;
   --color-txt-4: #ffffff;
 }
 
-/* Tema Escuro */
+[data-theme='dark'] {
+  --color1: #141519;
+  --color2: #e7c851;
+  --color3: #ffffff;
+  --color4: #232429;
+  --color2opacity20: #ffffff;
+  --color2opacity10: #1a1a1a;
+  --color-txt-1: #ffffff;
+  --color-txt-2: #141519;
+  --color-txt-3: #e7c851;
+  --color-txt-4: #ffffff;
+}
+
 [data-theme='light'] {
-  --color1: #1D1D1D;
-  --color2: #FFFFFF;
-  --color3: #006faf;
-  --color4: #005688;
-  --color5: #84b3ce;
-  --color2opacity20: #1e1e1e96;
-  --color2opacity10: #1e1e1e50;
-  --color-txt-1: #000000;
-  --color-txt-2: #FFFFFF;
-  --color-txt-3: #E0E0E0;
-  --color-txt-4: #000000;
+  --color1: #ffffff; /* Cor de fundo principal */
+  --color2: #232429; /* Cor de destaque */
+  --color3: #e7c851; /* Cor de texto principal */
+  --color4: #eeeeee; /* Cor de fundo secundária */
+  --color2opacity10: #ffffff;
+  --color2opacity20: #1a1a1a;
+  --color-txt-1: #141519; /* Texto principal */
+  --color-txt-2: #ffffff; /* Texto de contraste */
+  --color-txt-3: #141519; /* Texto de destaque */
+  --color-txt-4: #141519; /* Texto secundário */
 }
 
 
-/* Custom Theme */
-[data-theme='custom'] {
-  --color1: #1D1D1D; /* Preto - fundo principal */
-  --color2: #fff4cd; /* Amarelo claro - fundo secundário */
-  --color3: #000000; /* Amarelo - cor de destaque */
-  --color4: #000000; /* Amarelo mais escuro - cor de acento */
-  --color5: #ffefb7; /* Amarelo pálido - cor de destaque adicional */
-  --color2opacity20: #00000042; /* Amarelo claro com 20% de opacidade */
-  --color2opacity10: #00000042; /* Amarelo claro com 10% de opacidade */
-  --color-txt-1: #000000; /* Preto - texto principal */
-  --color-txt-2: #FFFFFF; /* Preto - texto secundário */
-  --color-txt-3: #E0E0E0; /* Cinza claro - texto terciário */
-  --color-txt-4: #000000; /* Preto - texto adicional */
-}
 
 /* Utility Classes for All Themes */
 .bg-color1 {

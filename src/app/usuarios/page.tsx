@@ -185,7 +185,7 @@ const Usuarios = () => {
       <Sidebar />
       
       <div className='w-[20%] h-full'></div>
-      <div className="flex flex-col w-4/5 px-20 py-8 bg-color2">
+      <div className="flex flex-col w-4/5 px-20 py-8 bg-color1">
         <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Gerenciamento de Usuários</h1>
 
         <div className="w-full flex justify-between items-center mb-6">
@@ -196,11 +196,11 @@ const Usuarios = () => {
               placeholder="Pesquisar por nome ou email..."
               value={filtro}
               onChange={handleSearch}
-              className="w-full p-4 pl-12 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
+              className="w-full p-4 pl-12 rounded-lg bg-color1 text-color-txt-1 border border-color-txt-3"
             />
           </div>
           <button
-            className="flex items-center text-color-txt-2 bg-color3 hover:bg-color4 px-6 py-3 rounded-lg"
+            className="flex items-center text-color-txt-2 bg-color2 hover:bg-color3 px-6 py-3 rounded-lg"
             onClick={() => { setUsuarioEditado(null); handleOpenModal(); }}
           >
             <FaUserPlus className="mr-2" />
@@ -208,29 +208,29 @@ const Usuarios = () => {
           </button>
         </div>
 
-        <div className="w-full bg-color2 px-8 py-10 rounded-lg shadow-md">
+        <div className="w-full bg-color4 px-8 py-10 rounded-lg shadow-md">
           <table className="w-full">
             <thead>
               <tr>
-                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Nome</th>
-                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Email</th>
-                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Data de Criação</th>
-                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Equipamentos</th>
-                <th className="border-b border-color-txt-3 p-4 text-left text-color-txt-1">Ações</th>
+                <th className="border-b border-color2 p-4 text-left text-color-txt-1">Nome</th>
+                <th className="border-b border-color2 p-4 text-left text-color-txt-1">Email</th>
+                <th className="border-b border-color2 p-4 text-left text-color-txt-1">Data de Criação</th>
+                <th className="border-b border-color2 p-4 text-left text-color-txt-1">Equipamentos</th>
+                <th className="border-b border-color2 p-4 text-left text-color-txt-1">Ações</th>
               </tr>
             </thead>
             <tbody>
               {usuariosFiltrados.map(usuario => (
                 <tr
                   key={usuario.id}
-                  className={`cursor-pointer ${usuarioSelecionado?.id === usuario.id ? 'bg-gray-200' : ''}`}
+                  className={`cursor-pointer rounded-b-2xl ${usuarioSelecionado?.id === usuario.id ? 'bg-color1 ' : ''}`}
                   onClick={() => handleSelectUsuario(usuario)}
                 >
-                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.name}</td>
-                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.email}</td>
-                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{new Date(usuario.createdAt).toLocaleDateString()}</td>
-                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">{usuario.equipamentosCount}</td>
-                  <td className="border-b border-color-txt-3 p-4 text-color-txt-1">
+                  <td className="border-b border-color1 p-4 text-color-txt-1">{usuario.name}</td>
+                  <td className="border-b border-color1 p-4 text-color-txt-1">{usuario.email}</td>
+                  <td className="border-b border-color1 p-4 text-color-txt-1">{new Date(usuario.createdAt).toLocaleDateString()}</td>
+                  <td className="border-b border-color1 p-4 text-color-txt-1">{usuario.equipamentosCount}</td>
+                  <td className="border-b border-color1 p-4 text-color-txt-1">
                     {usuarioSelecionado?.id === usuario.id && (
                       <button
                       onClick={(e) => { e.stopPropagation(); setUsuarioEditado(usuarioEditado); handleOpenModal(); }}
@@ -252,8 +252,8 @@ const Usuarios = () => {
           </table>
 
           {usuarioSelecionado && (
-            <div className="mt-8 p-4 border border-color-txt-3 bg-color2 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Equipamentos do Usuário</h3>
+            <div className="mt-8 p-4 border border-color-txt-3 bg-color2 rounded-lg text-color-txt-2">
+              <h3 className="text-xl text-color-txt-2 font-semibold mb-4">Equipamentos do Usuário</h3>
               <ul>
                 {usuarioSelecionado.equipamentos.map(equipamento => (
                   <li key={equipamento.id} className="mb-2">
@@ -283,7 +283,7 @@ const Usuarios = () => {
                   setNovoUsuario({ ...novoUsuario, nome: e.target.value });
                 }
               }}
-              className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
+              className="p-4 mb-4 rounded-lg bg-color1 text-color-txt-1 border border-color-txt-3"
             />
             <input
               type="email"
@@ -296,12 +296,12 @@ const Usuarios = () => {
                   setNovoUsuario({ ...novoUsuario, email: e.target.value });
                 }
               }}
-              className="p-4 mb-4 rounded-lg bg-color2 text-color-txt-1 border border-color-txt-3"
+              className="p-4 mb-4 rounded-lg bg-color1 text-color-txt-1 border border-color-txt-3"
             />
-            <div className="mb-4">
+            <div className="mb-4 text-color-txt-1">
               <p className="text-color-txt-1 mb-2">Selecione Equipamentos:</p>
               {equipamentosDisponiveisParaAdicionar.map((equipamento) => (
-                <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-blue-100 border border-blue-400' : ''} p-2 rounded-lg`}>
+                <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-color1 border-color2' : ''} p-2 rounded-lg`}>
                   <input
                     type="checkbox"
                     checked={(usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)}
@@ -313,7 +313,7 @@ const Usuarios = () => {
               ))}
               
               {usuarioEditado && equipamentosDoUsuarioSelecionado.map((equipamento) => (
-                <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-blue-100 border border-blue-400' : ''} p-2 rounded-lg`}>
+                <label key={equipamento.id} className={`block mb-2 ${((usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)) ? 'bg-color1 border-color2' : ''} p-2 rounded-lg`}>
                   <input
                     type="checkbox"
                     checked={(usuarioEditado ? usuarioEditado.equipamentos : novoUsuario.equipamentos).includes(equipamento.id)}
@@ -326,7 +326,7 @@ const Usuarios = () => {
             </div>
             <button
               onClick={usuarioEditado ? handleEditUsuario : handleAddUsuario}
-              className="bg-color3 hover:bg-color4 text-color-txt-2 px-4 py-2 rounded-lg"
+              className="bg-color2  text-color-txt-2 px-4 py-2 rounded-lg"
             >
               {usuarioEditado ? 'Atualizar' : 'Adicionar'}
             </button>
@@ -338,10 +338,11 @@ const Usuarios = () => {
           onClose={handleCloseConfirmDeleteModal}
           title="Confirmação"
         >
-          <p className="mb-4">Tem certeza de que deseja excluir este usuário?</p>
+          <p className="mb-4 text-color-txt-4">Tem certeza de que deseja excluir este usuário?</p>
+
           <button
             onClick={handleDeleteUsuario}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+            className="bg-red-500 hover:bg-red-600 text-color-txt-1 px-4 py-2 rounded-lg mr-5"
           >
             Excluir
           </button>
