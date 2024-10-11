@@ -87,6 +87,11 @@ body {
   --color-txt-4: #141519; /* Texto secundário */
 }
 
+.granulado{
+  background-image: url(../../public/bg.jpg);
+  background-position: center;
+  background-size: auto;
+}
 
 
 /* Utility Classes for All Themes */

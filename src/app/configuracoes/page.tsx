@@ -7,10 +7,10 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const Configuracoes = () => {
   const [mostrarSenha, setMostrarSenha] = useState<boolean>(false);
   const [senha, setSenha] = useState<string>('adm123'); // Preenchendo com a senha padrão
-  const [theme, setTheme] = useState<string>('light');
+  const [theme, setTheme] = useState<string>('dark');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
