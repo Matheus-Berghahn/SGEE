@@ -184,12 +184,12 @@ const Usuarios = () => {
     <div className="flex">
       <Sidebar />
       
-      <div className='w-[20%] h-full'></div>
-      <div className="flex flex-col w-4/5 px-20 py-8 bg-color1">
-        <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Gerenciamento de Usuários</h1>
+      <div className='md:w-[20%] h-full'></div>
+      <div className="flex flex-col md:w-4/5 px-10 md:px-20 py-8 bg-color1">
+        <h1 className="text-4xl md:text-6xl font-bold text-center mb-10 text-color-txt-1">Gerenciamento de Usuários</h1>
 
-        <div className="w-full flex justify-between items-center mb-6">
-          <div className="relative w-2/3">
+        <div className="w-full flex md:flex-row flex-col  justify-between  items-center mb-6">
+          <div className=" relative w-[80%] md:w-2/3">
             <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-color-txt-1" />
             <input
               type="text"
@@ -200,7 +200,7 @@ const Usuarios = () => {
             />
           </div>
           <button
-            className="flex items-center text-color-txt-2 bg-color2 hover:bg-color3 px-6 py-3 rounded-lg"
+            className="flex items-center text-color-txt-2 bg-color2 hover:bg-color3 px-6 py-3 rounded-lg mt-5 md:mt-0"
             onClick={() => { setUsuarioEditado(null); handleOpenModal(); }}
           >
             <FaUserPlus className="mr-2" />
@@ -208,7 +208,7 @@ const Usuarios = () => {
           </button>
         </div>
 
-        <div className="w-full bg-color4 px-8 py-10 rounded-lg shadow-md">
+        <div className="w-full bg-color4 px-8 py-10 rounded-lg shadow-md ">
           <table className="w-full">
             <thead>
               <tr>

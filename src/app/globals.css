@@ -73,20 +73,20 @@ body {
   --color-txt-3: #e7c851;
   --color-txt-4: #ffffff;
 }
-
+/*
 [data-theme='light'] {
-  --color1: #ffffff; /* Cor de fundo principal */
-  --color2: #232429; /* Cor de destaque */
-  --color3: #e7c851; /* Cor de texto principal */
-  --color4: #eeeeee; /* Cor de fundo secundária */
+  --color1: #ffffff;  
+  --color2: #232429; 
+  --color3: #e7c851; 
+  --color4: #eeeeee; 
   --color2opacity10: #ffffff;
   --color2opacity20: #1a1a1a;
-  --color-txt-1: #141519; /* Texto principal */
-  --color-txt-2: #ffffff; /* Texto de contraste */
-  --color-txt-3: #141519; /* Texto de destaque */
-  --color-txt-4: #141519; /* Texto secundário */
+  --color-txt-1: #141519;
+  --color-txt-2: #ffffff; 
+  --color-txt-3: #141519; 
+  --color-txt-4: #141519; 
 }
-
+*/
 .granulado{
   background-image: url(../../public/bg.jpg);
   background-position: center;

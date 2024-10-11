@@ -60,12 +60,12 @@ const Cadastro = () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <Sidebar />
-      <div className='w-[20%] h-full'></div>
-      <div className="flex justify-start pt-[3%] items-center flex-col w-4/5 p-6 bg-color1 ">
-        <h1 className="text-6xl font-bold text-center mb-10 text-color-txt-1">Cadastrar Equipamento</h1>
-        <div className="w-5/6 bg-color4 p-8 rounded-2xl">
+      <div className=' md:w-[20%] h-full'></div>
+      <div className="flex justify-start  items-center flex-col w-full md:w-4/5 p-6 bg-color1 pt-8 md:pt-[3%]  ">
+        <h1 className="text-4xl md:text-6xl font-bold text-center mb-10 text-color-txt-1">Cadastrar Equipamento</h1>
+        <div className="w-[95%] md:w-5/6 bg-color4 p-8 rounded-2xl">
           {error && (
             <div className="mb-4 p-2 bg-red-100 text-red-800 border border-red-300 rounded-md">
               {error}

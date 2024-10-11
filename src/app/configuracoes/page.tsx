@@ -7,19 +7,19 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const Configuracoes = () => {
   const [mostrarSenha, setMostrarSenha] = useState<boolean>(false);
   const [senha, setSenha] = useState<string>('adm123'); // Preenchendo com a senha padrão
-  const [theme, setTheme] = useState<string>('dark');
+  // const [theme, setTheme] = useState<string>('dark');
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }, []);
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem('theme') || 'dark';
+  //   setTheme(savedTheme);
+  //   document.documentElement.setAttribute('data-theme', savedTheme);
+  // }, []);
 
-  const changeTheme = (newTheme: string) => {
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-  };
+  // const changeTheme = (newTheme: string) => {
+  //   setTheme(newTheme);
+  //   localStorage.setItem('theme', newTheme);
+  //   document.documentElement.setAttribute('data-theme', newTheme);
+  // };
 
   return (
     <div className="flex">
@@ -52,7 +52,7 @@ const Configuracoes = () => {
           </div>
         </div>
 
-        <div className="w-4/6 bg-color4 px-6 py-4 rounded-lg mb-6 flex flex-col gap-4 shadow-md shadow-color2opacity10 border-2 border-color1">
+        {/* <div className="w-4/6 bg-color4 px-6 py-4 rounded-lg mb-6 flex flex-col gap-4 shadow-md shadow-color2opacity10 border-2 border-color1">
           <h3 className="text-3xl font-semibold text-color-txt-1">Tema</h3>
           <div className="flex gap-4">
             <button
@@ -68,7 +68,7 @@ const Configuracoes = () => {
               Light
             </button>
           </div>
-        </div>
+        </div> */}
 
       </div>
     </div>

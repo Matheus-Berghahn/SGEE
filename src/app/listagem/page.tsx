@@ -108,7 +108,7 @@ const EquipamentoPage: React.FC = () => {
       <div className='w-[20%] h-full'></div>
       <div className="flex-1 p-6 bg-color1">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-color-txt-1">Equipamentos</h1>
+          <h1 className="text-3xl font-bold text-color-txt-1 pt-10 md:pt-0">Equipamentos</h1>
         </div>
         <div className="mb-4">
           <div className="relative">

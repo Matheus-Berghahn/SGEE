@@ -22,7 +22,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Botão de abrir/fechar a sidebar no mobile */}
-      <div className="md:hidden fixed z-20 top-4 left-4">
+      <div className="md:hidden fixed z-20 top-4 left-4 text-color-txt-1">
         <button onClick={toggleSidebar}>
           {isOpen ? <FaTimes size={30} /> : <FaBars size={30} />}
         </button>
@@ -62,12 +62,12 @@ const Sidebar = () => {
             </div>
           </Link>
           
-          <Link href="/configuracoes">
+          {/* <Link href="/configuracoes">
             <div className={`flex items-center text-xl px-4 pt-2 cursor-pointer pb-2 ${isActive('/configuracoes') ? 'bg-color2 text-color1 w-[90%] h-16 rounded-2xl' : ''}`}>
               <FaCog className="mr-3" />
               Configurações
             </div>
-          </Link>
+          </Link> */}
         </div>
       </div>
 
