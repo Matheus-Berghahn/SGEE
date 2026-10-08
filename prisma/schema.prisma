@@ -1,33 +1,101 @@
 generator client {
   provider = "prisma-client-js"
+  engineType = "client"
 }
-
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
-
 model Adm {
-  email    String @unique @default("adm") 
-  password String @default("adm123")               
+  email String @id
+  password String
+  name String @default("Administrador")
+  role String @default("ADMIN")
+  active Boolean @default(true)
+  failedAttempts Int @default(0)
+  lockedUntil DateTime?
+  passwordChangeRequired Boolean @default(false)
+  sessions Session[]
 }
-
+model Session {
+  tokenHash String @id
+  accountEmail String
+  account Adm @relation(fields:[accountEmail], references:[email], onDelete:Cascade)
+  expiresAt DateTime
+  @@index([expiresAt])
+}
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  name         String
-  createdAt    DateTime      @default(now())
-  equipamentos Equipamento[] 
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String
+  createdAt DateTime @default(now())
+  department String @default("")
+  location String @default("")
+  active Boolean @default(true)
+  equipamentos Equipamento[]
+}
+model Equipamento {
+  id Int @id @default(autoincrement())
+  nome String
+  tipo String
+  status String
+  descricao String
+  user User? @relation(fields:[userId],references:[id],onDelete:SetNull)
+  userId Int?
+  assetTag String? @unique
+  serial String? @unique
+  brand String @default("")
+  model String @default("")
+  location String @default("")
+  purchaseDate DateTime?
+  warrantyUntil DateTime?
+  purchaseCents Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  archivedAt DateTime?
+  movements Movement[]
+  maintenance Maintenance[]
+  @@index([status, tipo])
+  @@index([userId])
+}
+model Movement {
+  id Int @id @default(autoincrement())
+  equipmentId Int
+  equipment Equipamento @relation(fields:[equipmentId], references:[id],onDelete:Restrict)
+  kind String
+  fromName String?
+  toName String?
+  note String @default("")
+  actor String
+  createdAt DateTime @default(now())
+  @@index([equipmentId, createdAt])
+}
+model Maintenance {
+  id Int @id @default(autoincrement())
+  equipmentId Int
+  equipment Equipamento @relation(fields:[equipmentId],references:[id],onDelete:Restrict)
+  title String
+  description String @default("")
+  vendor String @default("")
+  status String @default("aberta")
+  dueAt DateTime?
+  costCents Int @default(0)
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+  @@index([status, dueAt])
+}
+model AuditLog {
+  id Int @id @default(autoincrement())
+  actor String
+  action String
+  target String
+  createdAt DateTime @default(now())
+}
+model AppSettings {
+  id Int @id @default(1)
+  company String @default("SGEE")
 }
 
-model Equipamento {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  tipo      String  
-  status    String
-  descricao String
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
-}
+
 

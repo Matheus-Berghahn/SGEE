@@ -1,5 +1,1 @@
-// src/services/database/index.ts
-
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+export {db as prisma} from '@/lib/db';

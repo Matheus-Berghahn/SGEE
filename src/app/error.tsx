@@ -1,0 +1,1 @@
+'use client';export default function ErrorPage({reset}:{reset:()=>void}){return <main className="connection-error"><div className="brand-icon">S</div><h1>Não foi possível carregar o sistema.</h1><p>Confira a conexão com o banco e tente novamente. Seus registros não foram alterados.</p><button className="button primary" onClick={reset}>Tentar novamente</button></main>}

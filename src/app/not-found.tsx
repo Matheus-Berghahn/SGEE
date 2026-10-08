@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function NotFound(){return <main className="connection-error"><h1>Essa página não foi encontrada.</h1><Link className="button primary" href="/">Voltar ao dashboard</Link></main>}

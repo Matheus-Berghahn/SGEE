@@ -1,4 +1,1 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const nextConfig={turbopack:{root:process.cwd()},agentRules:false}; export default nextConfig;
